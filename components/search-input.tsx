@@ -1,11 +1,36 @@
-import React, { useState } from 'react'
+"use client"
+
+import React, { useEffect, useState } from 'react'
 import { Search } from "lucide-react";
 import { Input } from './ui/input';
-
+import { useDebounce } from '@/hooks/use-debounce';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import qs from "query-string"
 
 export const SearchInput = () => {
 
     const [value, setValue] = useState("")
+
+    const debouncedValue = useDebounce(value)
+
+
+    const searchParams = useSearchParams();
+    const router = useRouter();
+    const pathname = usePathname();
+
+    const currentCategoryId = searchParams.get("categoryId");
+
+    useEffect(() => {
+        const url = qs.stringifyUrl({
+            url: pathname,
+            query: {
+                categoryId: currentCategoryId,
+                title: debouncedValue,
+            }
+        }, { skipEmptyString: true, skipNull: true })
+        router.push(url);
+    }, [debouncedValue, currentCategoryId, router, pathname])
+
 
     return (
         <div className='relative'>
