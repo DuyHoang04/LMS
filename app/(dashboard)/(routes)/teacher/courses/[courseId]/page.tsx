@@ -62,6 +62,8 @@ const CourseIdPage = async ({ params }: CourseIdPageProps) => {
         course.chapters.some(chapter => chapter.isPublished),
     ];
 
+
+
     const totalFields = requiredFields.length;
     const completedFields = requiredFields.filter(Boolean).length;
 

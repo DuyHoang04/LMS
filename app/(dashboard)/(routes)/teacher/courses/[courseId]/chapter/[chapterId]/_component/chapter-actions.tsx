@@ -2,9 +2,11 @@
 
 import { ConfirmModal } from '@/components/modals/confirm-modal';
 import { Button } from '@/components/ui/button';
+import axios from 'axios';
 import { Trash } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
+import toast from 'react-hot-toast';
 
 interface ChapterActionsProps {
     disabled: boolean;
@@ -23,11 +25,35 @@ export const ChapterActions = ({
     const [isLoading, setIsLoading] = useState(false);
 
     const onClick = async () => {
-
+        setIsLoading(true);
+        try {
+            if (isPublished) {
+                await axios.patch(`/api/courses/${courseId}/chapters/${chapterId}/unpublish`);
+                toast.success("Chapter unpublished");
+            } else {
+                await axios.patch(`/api/courses/${courseId}/chapters/${chapterId}/publish`)
+                toast.success("Chapter published");
+            }
+        } catch {
+            toast.error("Some thing went wrong")
+        } finally {
+            setIsLoading(false)
+        }
     }
 
     const onDelete = async () => {
+        setIsLoading(true)
+        try {
+            await axios.delete(`/api/courses/${courseId}/chapters/${chapterId}`);
 
+            toast.success("Chapter deleted");
+            router.refresh();
+            router.push(`/teacher/courses/${courseId}`);
+        } catch {
+            toast.error("Some thing went wrong")
+        } finally {
+            setIsLoading(false)
+        }
     }
 
     return (
