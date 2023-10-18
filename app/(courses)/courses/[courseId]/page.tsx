@@ -31,9 +31,6 @@ const CourseIdPage = async ({ params }: Params) => {
     }
 
     return redirect(`/courses/${course.id}/chapters/${course.chapters[0].id}`);
-    return (
-        <div>page</div>
-    )
 }
 
 export default CourseIdPage
