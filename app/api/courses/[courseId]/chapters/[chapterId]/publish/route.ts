@@ -20,12 +20,16 @@ export async function PATCH(
             return new NextResponse("Unauthorized", { status: 401 });
         }
 
+        console.log(chapterId, courseId)
+
         const ownCourse = await db.course.findUnique({
             where: {
                 id: params.courseId,
                 userId
             }
         });
+
+        console.log(ownCourse)
 
         if (!ownCourse) {
             return new NextResponse("Unauthorized", { status: 401 });
